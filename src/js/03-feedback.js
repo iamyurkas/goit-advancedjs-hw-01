@@ -4,20 +4,23 @@ const doc = {
   form: document.querySelector('.feedback-form'),
   email: document.querySelector('.feedback-form input'),
   message: document.querySelector('.feedback-form textarea'),
-}
+};
 
-doc.form.addEventListener('input', throttle(
-  () => {
+doc.form.addEventListener(
+  'input',
+  throttle(() => {
     const email = doc.email.value;
     const message = doc.message.value;
 
-    localStorage.setItem('feedback-form-state', JSON.stringify({
-      email,
-      message
-    }));
-  },
-  500
-));
+    localStorage.setItem(
+      'feedback-form-state',
+      JSON.stringify({
+        email,
+        message,
+      })
+    );
+  }, 500)
+);
 
 window.addEventListener('load', () => {
   const formFields = JSON.parse(localStorage.getItem('feedback-form-state'));
@@ -28,14 +31,13 @@ window.addEventListener('load', () => {
   }
 });
 
-doc.form.addEventListener('submit', () => {
+doc.form.addEventListener('submit', event => {
+  event.preventDefault();
   console.log({
     email: doc.email.value,
     message: doc.message.value,
   });
-    
-  doc.email.value = '';
-  doc.message.value = '';
-    
-  localStorage.clear();
+
+  doc.form.reset();
+  localStorage.removeItem('feedback-form-state');
 });
